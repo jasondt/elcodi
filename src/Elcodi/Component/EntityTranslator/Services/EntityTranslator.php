@@ -40,6 +40,17 @@ class EntityTranslator implements EntityTranslatorInterface
     protected $configuration;
 
     /**
+     * @var boolean
+     *
+     * Fallback is enabled.
+     *
+     * If a field is required and the fallback flag is enabled, all translations
+     * will not be required anymore, but just the translation with same language
+     * than master
+     */
+    protected $fallback = true;
+
+    /**
      * Construct method
      *
      * @param EntityTranslationProviderInterface $entityTranslationProvider Translation Provider
@@ -85,7 +96,10 @@ class EntityTranslator implements EntityTranslatorInterface
                         $locale
                     );
 
-                $object->$setter($translation);
+                if ($translation || !$this->fallback) {
+
+                    $object->$setter($translation);
+                }
             }
         }
 
